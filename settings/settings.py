@@ -1,0 +1,1 @@
+CARPETA_ADDRESS = 'C:\imagenologia'
