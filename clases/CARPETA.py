@@ -12,6 +12,7 @@ class CARPETA():
         
         content = os.listdir(self._FOLDER_ADDRESS)
         
+        respuesta = []
         for file in content:
             
             full_route = fr"{self._FOLDER_ADDRESS}\{file}"
@@ -19,15 +20,18 @@ class CARPETA():
             ti_c = os.path.getctime(full_route)             
             
             c_ti = time.ctime(ti_c)                                             
-            print(full_route,c_ti)
             
+            respuesta.append(f"{full_route}{c_ti}")
+            # print(full_route,c_ti)
+
+        return respuesta
             
-    def Folder_list(self):    
+    def handle_folder_list(self):    
     
         with os.scandir(self._FOLDER_ADDRESS) as ficheros:
             subdirectorios = [fichero.name for fichero in ficheros if fichero.is_dir()]
         
-        print(subdirectorios)
+        return subdirectorios
             
         
         
