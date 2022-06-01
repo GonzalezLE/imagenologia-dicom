@@ -18,8 +18,14 @@ class CARPETA():
             full_route = fr"{self._FOLDER_ADDRESS}\{file}"
             
             ti_c = os.path.getctime(full_route)             
+            print(ti_c)
+            
             
             c_ti = time.ctime(ti_c)                                             
+            
+            
+            
+            
             
             respuesta.append(f"{full_route}{c_ti}")
             # print(full_route,c_ti)

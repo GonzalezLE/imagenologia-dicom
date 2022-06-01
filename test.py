@@ -1,8 +1,8 @@
-import tkinter
-def funcion():
-    print ("Victor")
-root = tkinter.Tk()
-root.geometry('200x200')
-boton = tkinter.Button(root, text="Cual es tu nombre", command=funcion)
-boton.pack()
+import tkinter as tk
+
+from tkcalendar import DateEntry
+root = tk.Tk()
+cal = DateEntry(root, width=12, year=2019, month=6, day=22, 
+background='darkblue', foreground='white', borderwidth=2)
+cal.pack(padx=10, pady=10)
 root.mainloop()
