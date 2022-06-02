@@ -8,7 +8,7 @@ import datetime
  
 
 from clases.CARPETA import CARPETA
-from settings.settings import CARPETA_ADDRESS
+from settings.settings import CARPETA_ADDRESS,FOLDER_UDN
 
 class App(ttk.Frame):
     
@@ -23,19 +23,18 @@ class App(ttk.Frame):
         self.init()
         
         
-    def saludar(self):
+    def find_dicom(self):
         
         inicio = self.calendario_fecha_inicio.get_date()
         inicio = str(inicio)
                         
         year,month,day= inicio.split('-')        
-        print(f'{year[2]}{year[3]}{month}')
-        
-        
-        
+        filter = f'{year[2]}{year[3]}{month}'
+                        
         nuevo_ruta = f"{CARPETA_ADDRESS}\\{self.combo.get()}"
         carpeta = CARPETA(nuevo_ruta)
-        lis = carpeta.files_List()
+        
+        lis = carpeta.files_List(filter)
         
         self.listbox.delete(0,'end')
         
@@ -66,11 +65,19 @@ class App(ttk.Frame):
         
         folder_list =  data.handle_folder_list()
         
+        folder_list_filter =[]
+        
+        for folder in folder_list:
+            if folder in FOLDER_UDN:
+                folder_list_filter.append(folder)
+                
+                
+        
         self.label=ttk.Label(self.master, text= "Sucursal", font = self.font_size_general())
         self.label.pack()
         self.label.place(x=25,y=15)
 
-        self.combo = ttk.Combobox(self.master, values = folder_list, state = "readonly",width= 45)
+        self.combo = ttk.Combobox(self.master, values = folder_list_filter, state = "readonly",width= 45)
         self.combo.set("Seleccionar")
         self.combo.place(x = 20, y = 40)
         
@@ -82,9 +89,9 @@ class App(ttk.Frame):
 
 
     def handle_create_butto(self):        
-        self.boton = Button(self.master, text="Ver lista", command=self.saludar)
+        self.boton = Button(self.master, text="Ver lista", command=self.find_dicom)
         self.boton.pack()
-        self.boton.place(x=650,y=35)
+        self.boton.place(x=550,y=35)
         
         
     def get_date(self):
@@ -94,7 +101,7 @@ class App(ttk.Frame):
     
     
     def handle_create_input_data(self):
-        self.label_fecha_inicio=ttk.Label(self.master, text= "Fecha inicio", font = self.font_size_general())
+        self.label_fecha_inicio=ttk.Label(self.master, text= "Fecha a buscar", font = self.font_size_general())
         self.label_fecha_inicio.pack()
         self.label_fecha_inicio.place(x=350,y=15)
         
@@ -109,31 +116,9 @@ class App(ttk.Frame):
             )
         self.calendario_fecha_inicio.pack()
         self.calendario_fecha_inicio.place(x=350 ,y=40)
-        
-        
-        self.label_fecha_fin=ttk.Label(self.master, text= "Fecha fin", font = self.font_size_general())
-        self.label_fecha_fin.pack()
-        self.label_fecha_fin.place(x=480,y=15)
-        
-        self.calendario_fecha_fin = DateEntry(
-            self.master,
-            width=12,                        
-            background='#ef8133',
-            foreground='#ffffff',
-            borderwidth=5,
-            )
-        self.calendario_fecha_fin.pack()
-        self.calendario_fecha_fin.place(x=480 ,y=40)
-        
-        
-        
-        
-        
 
 
-
-
-
+        
 if __name__ == '__main__':    
     myapp = App()    
     myapp.mainloop()
