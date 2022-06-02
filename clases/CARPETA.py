@@ -13,7 +13,7 @@ class CARPETA():
         return datetime.datetime.fromtimestamp(t)        
     
         
-    def files_List(self ,patron='211116'):            
+    def files_List(self ,patron='000000'):
         
         content = os.listdir(self._FOLDER_ADDRESS)        
         respuesta = []
@@ -21,7 +21,7 @@ class CARPETA():
         for file in content:
             
             full_route = fr"{self._FOLDER_ADDRESS}\{file}"
-                        
+
             if re.search(patron,full_route):                               
                 respuesta.append(f"{full_route}")
             
