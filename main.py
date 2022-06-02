@@ -1,3 +1,5 @@
+import os
+import re
 from tkinter import *
 from tkinter import ttk,messagebox
 from turtle import color
@@ -24,7 +26,11 @@ class App(ttk.Frame):
     def saludar(self):
         
         inicio = self.calendario_fecha_inicio.get_date()
-        fin =  self.calendario_fecha_fin.get_date()
+        inicio = str(inicio)
+                        
+        year,month,day= inicio.split('-')        
+        print(f'{year[2]}{year[3]}{month}')
+        
         
         
         nuevo_ruta = f"{CARPETA_ADDRESS}\\{self.combo.get()}"
@@ -48,6 +54,11 @@ class App(ttk.Frame):
                                    
     def font_size_general(self):
        return ("Arial",12)
+   
+    
+    def modification_date(filename): 
+        t = os.path.getmtime(filename) 
+        return datetime.datetime.fromtimestamp(t)
         
         
     def combobox_udns(self):

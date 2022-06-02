@@ -1,34 +1,30 @@
-import os
-import time
+from datetime import datetime
+import os.path,time
 from turtle import width
-
+import re
 class CARPETA():
     
     def __init__(self,folder_address):
         self._FOLDER_ADDRESS = folder_address
         
         
-    def files_List(self):    
+    def modification_date(filename): 
+        t = os.path.getmtime(filename) 
+        return datetime.datetime.fromtimestamp(t)        
+    
         
-        content = os.listdir(self._FOLDER_ADDRESS)
+    def files_List(self ,patron='211116'):            
         
+        content = os.listdir(self._FOLDER_ADDRESS)        
         respuesta = []
+        
         for file in content:
             
             full_route = fr"{self._FOLDER_ADDRESS}\{file}"
+                        
+            if re.search(patron,full_route):                               
+                respuesta.append(f"{full_route}")
             
-            ti_c = os.path.getctime(full_route)             
-            print(ti_c)
-            
-            
-            c_ti = time.ctime(ti_c)                                             
-            
-            
-            
-            
-            
-            respuesta.append(f"{full_route}{c_ti}")
-            # print(full_route,c_ti)
 
         return respuesta
             
