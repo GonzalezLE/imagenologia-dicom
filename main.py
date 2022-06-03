@@ -1,14 +1,13 @@
 import os
-import re
+import json
 from tkinter import *
 from tkinter import ttk,messagebox
-from turtle import color
 from tkcalendar import DateEntry
 import datetime
- 
+from clases.Api_dicom import Api_dicom
 
 from clases.CARPETA import CARPETA
-from settings.settings import CARPETA_ADDRESS,FOLDER_UDN
+from settings.settings import CARPETA_ADDRESS,FOLDER_UDN, URL_API_INSERT_DICOM
 
 class App(ttk.Frame):
     
@@ -19,7 +18,7 @@ class App(ttk.Frame):
         self.master.title("Humanly Software - Imagenologia")
         self.master.geometry("800x300")
         self.master.resizable(0,0)
-                
+
         self.init()
         
         
@@ -30,18 +29,22 @@ class App(ttk.Frame):
                         
         year,month,day= inicio.split('-')        
         filter = f'{year[2]}{year[3]}{month}'
-                        
-        nuevo_ruta = f"{CARPETA_ADDRESS}\\{self.combo.get()}"
-        carpeta = CARPETA(nuevo_ruta)
         
+        nuevo_ruta = f"{CARPETA_ADDRESS}\\{self.combo.get()}"
+        carpeta = CARPETA(nuevo_ruta)        
         lis = carpeta.files_List(filter)
         
         self.listbox.delete(0,'end')
         
-        contador = 1
+        contador = 0
         for item in lis:
+            contador+=1
             self.listbox.insert(contador,item)
-            contador+=1            
+        
+        
+
+
+        messagebox.showinfo("Información", f"Imagenes encontradas: {contador}")
 
 
     def init(self):
@@ -49,6 +52,7 @@ class App(ttk.Frame):
         self.list_dicom()
         self.handle_create_butto()
         self.handle_create_input_data()
+        self.handle_create_button_send_json()
 
                                    
     def font_size_general(self):
@@ -91,9 +95,37 @@ class App(ttk.Frame):
     def handle_create_butto(self):        
         self.boton = Button(self.master, text="Ver lista", command=self.find_dicom)
         self.boton.pack()
-        self.boton.place(x=550,y=35)
+        self.boton.place(x=540,y=35)
+        
+    def handle_create_button_send_json(self):        
+        self.boton = Button(self.master, text="enviar", command=self.handle_send_json)
+        self.boton.pack()
+        self.boton.place(x=600,y=35)
         
         
+    def handle_send_json(self):
+        items = self.listbox.get(0,'end')
+        
+        json_items = []
+        
+        for item in items:            
+            json_items.append(item)
+        
+
+        json_final = {
+            'dicoms':json_items
+            }
+        
+        Json_manda = json.dumps(json_final)
+        obj_dicom_petition = Api_dicom(URL_API_INSERT_DICOM)
+        
+        
+        if obj_dicom_petition.insert(Json_manda):
+            messagebox.showinfo("Información", "Informacion guardada")
+        else:
+            messagebox.showerror("Información", "No se puedo guardar la información")        
+        
+    
     def get_date(self):
         currentDatatime = datetime.datetime.now()
         date = currentDatatime.date()
@@ -118,7 +150,7 @@ class App(ttk.Frame):
         self.calendario_fecha_inicio.place(x=350 ,y=40)
 
 
-        
+
 if __name__ == '__main__':    
     myapp = App()    
     myapp.mainloop()
