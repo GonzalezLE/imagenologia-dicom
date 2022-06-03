@@ -26,3 +26,5 @@ FOLDER_UDN = [
     'UnidadMovil',
     'Xicotepec'
 ]
+
+URL_API_INSERT_DICOM = 'https://humanly-sw.com/x-labsus/Dicom'
